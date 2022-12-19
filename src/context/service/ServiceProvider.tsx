@@ -1,9 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
-import {
-  CategoryId,
-  Service,
-  ServiceId,
-} from '../../app/services/domain/Service';
+import { CategoryId, Service, ServiceId } from './Service';
 import { getUUID } from '../../utils/generateUUID';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import { getLocalStorage, setLocalStorage } from '../../utils/localStorage';
@@ -139,7 +135,7 @@ const ServiceProvider = ({ children }: { children: ReactNode }) => {
     }
 
     if (!serviceForm.data.description) {
-      errorMessages.description = 'Seleccione una categoría para el servicio.';
+      errorMessages.description = 'Agregue una descripción al servicio';
     }
 
     if (!serviceForm.data.category) {

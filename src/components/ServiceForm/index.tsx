@@ -1,5 +1,3 @@
-import { ChangeEventHandler } from 'react';
-import { Service } from '../../app/services/domain/Service';
 import { useServiceCtx } from '../../context/service/ServiceCtx';
 import Button from '../Button';
 import Input from '../Input';
@@ -8,46 +6,17 @@ import Spinner from '../Spinner';
 import TextArea from '../TextArea';
 import Typography from '../Typography';
 import { FormWrapper } from './styled';
+import { useServiceForm } from './useServiceForm';
 
 const ServiceForm = () => {
+  const ctx = useServiceCtx();
+
   const {
-    categories,
-    serviceForm: { data, errors, loading },
-    changeValueServiceFormState,
-    clearServiceForm,
-    addService,
-    isValidDataServiceForm,
-    updateService,
-  } = useServiceCtx();
-
-  const handleSave = () => {
-    if (isValidDataServiceForm()) {
-      if (data.id) {
-        updateService(data as Service);
-      } else {
-        addService(data as Service);
-      }
-      clearServiceForm();
-    }
-  };
-
-  const handleOnChangeInput: ChangeEventHandler<
-    HTMLInputElement | HTMLTextAreaElement
-  > = (e) => {
-    const { name, value } = e.target;
-    changeValueServiceFormState(name, value);
-  };
-
-  const handleOnChangeSelect: ChangeEventHandler<HTMLSelectElement> = (e) => {
-    const { name, value: categoryId } = e.target;
-    const categoryFound = categories.data.find(
-      (category) => category.id === categoryId
-    );
-
-    changeValueServiceFormState(name, categoryFound);
-  };
-
-  const handleCancel = () => clearServiceForm();
+    handleOnChangeInput,
+    handleOnChangeSelect,
+    handleSave,
+    handleCancel,
+  } = useServiceForm(ctx);
 
   return (
     <FormWrapper>
@@ -59,31 +28,31 @@ const ServiceForm = () => {
           type='text'
           placeholder='Nombre'
           name='name'
-          value={data.name}
+          value={ctx.serviceForm.data.name}
           onChange={handleOnChangeInput}
         />
-        {errors.name && (
+        {ctx.serviceForm.errors.name && (
           <Typography size='sm' $color='danger'>
-            {errors.name}
+            {ctx.serviceForm.errors.name}
           </Typography>
         )}
       </div>
       <div className='mb-3'>
         <Select
           name='category'
-          value={data.category?.id}
+          value={ctx.serviceForm.data.category?.id}
           onChange={handleOnChangeSelect}
         >
           <option value=''>Selecciona una categoría</option>
-          {categories.data.map((service: any) => (
+          {ctx.categories.data.map((service: any) => (
             <option value={service.id} key={service.id}>
               {service.name}
             </option>
           ))}
         </Select>
-        {errors.category && (
+        {ctx.serviceForm.errors.category && (
           <Typography size='sm' $color='danger'>
-            {errors.category}
+            {ctx.serviceForm.errors.category}
           </Typography>
         )}
       </div>
@@ -92,12 +61,12 @@ const ServiceForm = () => {
           rows={3}
           placeholder='Descripción'
           name='description'
-          value={data.description}
+          value={ctx.serviceForm.data.description}
           onChange={handleOnChangeInput}
         />
-        {errors.description && (
+        {ctx.serviceForm.errors.description && (
           <Typography size='sm' $color='danger'>
-            {errors.description}
+            {ctx.serviceForm.errors.description}
           </Typography>
         )}
       </div>
@@ -107,10 +76,10 @@ const ServiceForm = () => {
         variant='contained'
         className='me-3'
         onClick={handleSave}
-        disabled={loading}
+        disabled={ctx.serviceForm.loading}
       >
-        {loading && <Spinner size='sm' />}
-        {data.id ? 'Editar' : 'Grabar'}
+        {ctx.serviceForm.loading && <Spinner size='sm' />}
+        {ctx.serviceForm.data.id ? 'Editar' : 'Grabar'}
       </Button>
       <Button
         type='button'

@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import { MdOutlineDelete } from 'react-icons/md';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { FC } from 'react';
-import { Service } from '../../app/services/domain/Service';
+import { Service } from '../../context/service/Service';
 
 type ServiceCardProps = Service & {
   handleEdit: (id: any) => void;

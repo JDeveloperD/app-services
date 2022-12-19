@@ -1,10 +1,5 @@
 import { createContext, useContext } from 'react';
-import {
-  Category,
-  CategoryId,
-  Service,
-  ServiceId,
-} from '../../app/services/domain/Service';
+import { Category, CategoryId, Service, ServiceId } from './Service';
 
 export interface ServicesState {
   loading: boolean;
